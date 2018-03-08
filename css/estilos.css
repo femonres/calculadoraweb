@@ -44,6 +44,10 @@ body{
   width: 22%;
   height: 62.91px;
 }
+/* Cambio efectuado para reducir las teclas 987654 */
+.teclado img.presionada{
+  height: 61px !important;
+}
 @font-face {
   font-family: digital;
   src: url("../fonts/digital.ttf");
@@ -73,11 +77,21 @@ body{
   width: 90%;
   height: 100%;
   margin-left: 10px;
-
 }
+
+/* Cambio efectuado para reducir la tecla + */
+#mas.presionada{
+  height: 98% !important;
+}
+
 .teclado .row .col1 img{
   width: 29%;
   height: 62.91px;
+}
+
+/* Cambio efectuado para reducir las teclas 123 */
+.teclado .row .col1 img.presionada{
+  height: 61px !important;
 }
 
 .container-libreta{
