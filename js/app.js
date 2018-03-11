@@ -6,6 +6,11 @@
 
 var calculadora = (function () {
 
+    var tempResult = 0;
+    var lastDigits = "";
+    var lastOperation = "";
+    var display = document.querySelector(".pantalla #display");
+
     var keyCodes = { 48 : "0", 49 : "1", 50 : "2", 51 : "3", 52 : "4", 53 : "5", 54 : "6", 55 : "7", 56 : "8", 57 : "9",
         96 : "0", 97 : "1", 98 : "2", 99 : "3", 100 : "4", 101 : "5", 102 : "6", 103 : "7", 104 : "8", 105 : "9",
         106 : "por", 107 : "mas", 109 : "menos", 110 : "punto", 111 : "dividido", 187 : "igual", 13 : "on", 0 : "sign" };
@@ -30,7 +35,6 @@ var calculadora = (function () {
 		var key = event.which || event.keyCode;
 		
 		if (key in keyCodes) {
-            //console.log("La tecla presionada fue: ", keyCodes[key]);
             if (/^([0-9])*$/.test(keyCodes[key])) {
                 addKeyInDisplay(keyCodes[key]);
             } else if (key == 110) { // Tecla punto
@@ -42,7 +46,6 @@ var calculadora = (function () {
 	}
 
     var sendKeyOnClic = function (event) {
-        //console.log("La tecla de la calculadora seleccionada fue: ", event);
         if (/^([0-9])*$/.test(event.target.id)) {
             addKeyInDisplay(event.target.id);
         } else if (event.target.id == "punto") {
@@ -51,12 +54,20 @@ var calculadora = (function () {
             changeSignInDisplay();
         } else if (event.target.id == "on") {
             clearDisplay();
+        } else if (event.target.id == "mas") {
+            addMathOperation("+");
+        } else if (event.target.id == "menos") {
+            addMathOperation("-");
+        } else if (event.target.id == "por") {
+            addMathOperation("*");
+        } else if (event.target.id == "dividido") {
+            addMathOperation("/");
+        } else if (event.target.id == "igual") {
+            display.innerHTML = showResult();
         }
     }
     
 	var addKeyInDisplay = function (key) {
-        var display = document.querySelector(".pantalla #display");
-
         if (!(display.innerHTML == "0" && key == "0")) {
             if (display.innerHTML.length < 8) {
                 if (display.innerHTML == "0") display.innerHTML = "";
@@ -87,7 +98,38 @@ var calculadora = (function () {
     }
     
     var clearDisplay = function () {
-        document.querySelector(".pantalla #display").innerHTML = "0";
+        tempResult = 0;
+        lastDigits = "";
+        lastOperation = "";
+        display.innerHTML = "0";
+    }
+
+    var addMathOperation = function (operation) {
+        if (display.innerHTML != "0" && display.innerHTML != "") {
+            if (lastDigits != "") {
+                tempResult = eval(lastDigits + " " + display.innerHTML);
+                lastDigits = tempResult + " " + operation;
+            } else {
+                lastDigits = display.innerHTML + " " + operation;
+                lastOperation = "";
+            }
+            
+            display.innerHTML = "";
+        }
+    }
+
+    var showResult = function () {
+        var result = 0;
+
+        if (lastOperation == "") {
+            lastOperation = lastDigits.charAt(lastDigits.length-1) + " " + display.innerHTML
+            result = eval(lastDigits + " " + display.innerHTML);
+        } else {
+            result = eval(display.innerHTML + " " + lastOperation);
+        }
+        lastDigits = "";
+
+        return result;
     }
 
     var setListeners = function () {
