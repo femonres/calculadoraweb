@@ -129,7 +129,7 @@ var calculadora = (function () {
         }
         lastDigits = "";
 
-        return result;
+        return result.toString().substring(0, 8);
     }
 
     var setListeners = function () {
